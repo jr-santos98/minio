@@ -14,7 +14,7 @@ all: build
 
 checks:
 	@echo "Checking dependencies"
-	@(env bash $(PWD)/buildscripts/checkdeps.sh)
+	(env bash $(PWD)/buildscripts/checkdeps.sh)
 
 getdeps:
 	mkdir -p ${GOPATH}/bin
@@ -33,36 +33,36 @@ verifiers: getdeps vet fmt lint staticcheck spelling
 
 vet:
 	@echo "Running $@ check"
-	@GO111MODULE=on go vet github.com/minio/minio/...
+	GO111MODULE=on go vet github.com/minio/minio/...
 
 fmt:
 	@echo "Running $@ check"
-	@GO111MODULE=on gofmt -d cmd/
-	@GO111MODULE=on gofmt -d pkg/
+	GO111MODULE=on gofmt -d cmd/
+	GO111MODULE=on gofmt -d pkg/
 
 lint:
 	@echo "Running $@ check"
-	@GO111MODULE=on ${GOPATH}/bin/golint -set_exit_status github.com/minio/minio/cmd/...
-	@GO111MODULE=on ${GOPATH}/bin/golint -set_exit_status github.com/minio/minio/pkg/...
+	GO111MODULE=on ${GOPATH}/bin/golint -set_exit_status github.com/minio/minio/cmd/...
+	GO111MODULE=on ${GOPATH}/bin/golint -set_exit_status github.com/minio/minio/pkg/...
 
 staticcheck:
 	@echo "Running $@ check"
-	@GO111MODULE=on ${GOPATH}/bin/staticcheck github.com/minio/minio/cmd/...
-	@GO111MODULE=on ${GOPATH}/bin/staticcheck github.com/minio/minio/pkg/...
+	GO111MODULE=on ${GOPATH}/bin/staticcheck github.com/minio/minio/cmd/...
+	GO111MODULE=on ${GOPATH}/bin/staticcheck github.com/minio/minio/pkg/...
 
 spelling:
 	@echo "Running $@ check"
-	@GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find cmd/`
-	@GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find pkg/`
-	@GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find docs/`
-	@GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find buildscripts/`
-	@GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find dockerscripts/`
+	GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find cmd/`
+	GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find pkg/`
+	GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find docs/`
+	GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find buildscripts/`
+	GO111MODULE=on ${GOPATH}/bin/misspell -locale US -error `find dockerscripts/`
 
 # Builds minio, runs the verifiers then runs the tests.
 check: test
 test: verifiers build
 	@echo "Running unit tests"
-	@GO111MODULE=on CGO_ENABLED=0 go test -tags kqueue ./... 1>/dev/null
+	GO111MODULE=on CGO_ENABLED=0 go test -tags kqueue ./... 1>/dev/null
 
 test-race: verifiers build
 	@echo "Running unit tests under -race"
@@ -83,7 +83,7 @@ verify-healing:
 # Builds minio locally.
 build: checks
 	@echo "Building minio binary to './minio'"
-	@GO111MODULE=on CGO_ENABLED=0 go build -tags kqueue --ldflags $(BUILD_LDFLAGS) -o $(PWD)/minio 1>/dev/null
+	GO111MODULE=on CGO_ENABLED=0 go build -tags kqueue --ldflags $(BUILD_LDFLAGS) -o $(PWD)/minio 1>/dev/null
 
 docker: build
 	@docker build -t $(TAG) . -f Dockerfile.dev
