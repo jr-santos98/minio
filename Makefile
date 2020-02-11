@@ -29,7 +29,7 @@ endif
 crosscompile:
 	@(env bash $(PWD)/buildscripts/cross-compile.sh)
 
-verifiers: getdeps vet fmt lint staticcheck spelling
+verifiers: getdeps vet fmt lint spelling
 
 vet:
 	@echo "Running $@ check"
