@@ -70,14 +70,14 @@ test-race: verifiers build
 
 # Verify minio binary
 verify:
-	ifeq ($(GOARCH),ppc64le)
+ifeq ($(GOARCH),ppc64le)
 	@echo "Verifying build without race"
 	@GO111MODULE=on CGO_ENABLED=1 go build -tags kqueue --ldflags $(BUILD_LDFLAGS) -o $(PWD)/minio 1>/dev/null
-	else
-	@echo "Verifying build with race"		@echo "Verifying build with race"
-	@GO111MODULE=on CGO_ENABLED=1 go build -race -tags kqueue --ldflags $(BUILD_LDFLAGS) -o $(PWD)/minio 1>/dev/null		@GO111MODULE=on CGO_ENABLED=1 go build -race -tags kqueue --ldflags $(BUILD_LDFLAGS) -o $(PWD)/minio 1>/dev/null
-	endif
-	@(env bash $(PWD)/buildscripts/verify-build.sh)		@(env bash $(PWD)/buildscripts/verify-build.sh)
+else
+	@echo "Verifying build with race"
+	@GO111MODULE=on CGO_ENABLED=1 go build -race -tags kqueue --ldflags $(BUILD_LDFLAGS) -o $(PWD)/minio 1>/dev/null
+endif
+	@(env bash $(PWD)/buildscripts/verify-build.sh)
 
 # Verify healing of disks with minio binary
 verify-healing:
