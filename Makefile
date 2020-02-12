@@ -70,7 +70,7 @@ test-race: verifiers build
 
 # Verify minio binary
 verify:
-ifeq ($(GOARCH),ppc64le)
+ifeq ($(GOARCH),s390x)
 	@echo "Verifying build without race"
 	@GO111MODULE=on CGO_ENABLED=1 go build -tags kqueue --ldflags $(BUILD_LDFLAGS) -o $(PWD)/minio 1>/dev/null
 else
