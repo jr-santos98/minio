@@ -21,10 +21,9 @@ matrix:
   include:
     - os: linux
       dist: bionic
-      arch: ppc64le
       sudo: required
       env:
-        - ARCH=ppc64le
+        - ARCH=x86_64
         - CGO_ENABLED=0
         - GO111MODULE=on
       addons:
