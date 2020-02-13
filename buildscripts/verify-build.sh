@@ -330,12 +330,12 @@ function main()
         exit 1
     fi
 
-    echo "Testing in Erasure setup"
-    if ! run_test_erasure; then
-        echo "FAILED"
-        purge "$WORK_DIR"
-        exit 1
-    fi
+    #echo "Testing in Erasure setup"
+    #if ! run_test_erasure; then
+    #    echo "FAILED"
+    #    purge "$WORK_DIR"
+    #    exit 1
+    #fi
 
     echo "Testing in Distributed Erasure setup"
     if ! run_test_dist_erasure; then
