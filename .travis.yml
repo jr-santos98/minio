@@ -48,6 +48,35 @@ matrix:
         - export PATH="$HOME/.yarn/bin:$PATH"
         - cd browser && yarn && yarn test && cd ..
         - bash -c 'shopt -s globstar; shellcheck mint/**/*.sh'
+    
+    - os: linux
+      dist: bionic
+      sudo: required
+      env:
+        - ARCH=x86_64
+        - CGO_ENABLED=0
+        - GO111MODULE=on
+      addons:
+        apt:
+          update: true
+          packages:
+            - jq
+            - shellcheck
+      go: 1.13.x
+      script:
+        - make
+        - diff -au <(gofmt -s -d cmd) <(printf "")
+        - diff -au <(gofmt -s -d pkg) <(printf "")
+        - for d in $(go list ./... | grep -v browser); do CGO_ENABLED=1 go test -v --timeout 20m "$d"; done
+        #- make test
+        #- make test-race
+        - make verifiers
+        - make crosscompile
+        - make verify
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
+        - export PATH="$HOME/.yarn/bin:$PATH"
+        - cd browser && yarn && yarn test && cd ..
+        - bash -c 'shopt -s globstar; shellcheck mint/**/*.sh'
 
 before_script:
   # Add an IPv6 config - see the corresponding Travis issue
